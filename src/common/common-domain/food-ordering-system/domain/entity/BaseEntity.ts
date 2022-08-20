@@ -1,11 +1,11 @@
 export default class BaseEntity<ID> {
-  private id: string;
+  private id: ID;
 
-  public getId(): string {
+  public getId(): ID {
     return this.id;
   }
 
-  public setId(id: string): void {
+  public setId(id: ID): void {
     this.id = id;
   }
 }
