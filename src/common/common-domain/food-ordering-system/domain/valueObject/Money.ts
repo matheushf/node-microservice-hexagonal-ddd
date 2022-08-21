@@ -1,6 +1,8 @@
 export class Money {
   private amount: number;
 
+  public static ZERO = new Money(0);
+
   constructor(amount: number) {
     this.amount = amount;
   }
@@ -9,15 +11,15 @@ export class Money {
     return this.amount;
   }
 
-  isGreaterThanZero() {
+  public isGreaterThanZero() {
     return this.amount != null && this.amount > 0;
   }
 
-  isGreaterThan(money: Money) {
+  public isGreaterThan(money: Money) {
     return this.amount != null && this.amount > 0;
   }
 
-  add(money: Money): Money {
+  public add(money: Money): Money {
     return new Money(this.amount + money.getAmount());
   }
 
