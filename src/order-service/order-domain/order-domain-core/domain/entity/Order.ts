@@ -21,7 +21,7 @@ export class Order extends AggregateRoot<OrderId> {
 
   private trackingId: TrackingId;
   private orderStatus: OrderStatus;
-  private failureMessage: String[];
+  private failureMessages: String[];
 
   constructor(
     orderId: OrderId,
@@ -32,7 +32,7 @@ export class Order extends AggregateRoot<OrderId> {
     items: OrderItem[],
     trackingId: TrackingId,
     orderStatus: OrderStatus,
-    failureMessage: String[]
+    failureMessages: String[]
   ) {
     super(orderId);
     super.setId(orderId);
@@ -45,7 +45,7 @@ export class Order extends AggregateRoot<OrderId> {
     this.items = items;
     this.trackingId = trackingId;
     this.orderStatus = orderStatus;
-    this.failureMessage = failureMessage;
+    this.failureMessages = failureMessages;
   }
 
   public initializeOrder() {
@@ -58,6 +58,64 @@ export class Order extends AggregateRoot<OrderId> {
     this.validateInitialOrder();
     this.validateTotalPrice();
     this.validateItemsPrice();
+  }
+
+  public pay() {
+    if (this.orderStatus != OrderStatus.PENDING) {
+      throw new OrderDomainException(
+        "Order is not in correct state for pay operation!"
+      );
+    }
+
+    this.orderStatus = OrderStatus.PAID;
+  }
+
+  public approve() {
+    if (this.orderStatus != OrderStatus.PAID) {
+      throw new OrderDomainException(
+        "Order is not in correct state for approve operation!"
+      );
+    }
+
+    this.orderStatus = OrderStatus.APPROVED;
+  }
+
+  public initCancel(failureMessages: string[]) {
+    if (this.orderStatus != OrderStatus.PAID) {
+      throw new OrderDomainException(
+        "Order is not in correct state for initCancel operation!"
+      );
+    }
+
+    this.orderStatus = OrderStatus.CANCELLING;
+    this.updateFailureMessages(failureMessages);
+  }
+
+  public cancel(failureMessages: string[]) {
+    if (
+      this.orderStatus == OrderStatus.CANCELLING ||
+      this.orderStatus === OrderStatus.PENDING
+    ) {
+      throw new OrderDomainException(
+        "Order is not in correct state for cancel operation!"
+      );
+    }
+
+    this.orderStatus = OrderStatus.CANCELLED;
+    this.updateFailureMessages(failureMessages);
+  }
+
+  private updateFailureMessages(failureMessages: string[]) {
+    if (this.failureMessages && failureMessages) {
+      this.failureMessages = [
+        ...this.failureMessages,
+        ...failureMessages.filter((value) => value),
+      ];
+    }
+
+    if (!this.failureMessages) {
+      this.failureMessages = failureMessages;
+    }
   }
 
   private validateInitialOrder() {
@@ -136,6 +194,6 @@ export class Order extends AggregateRoot<OrderId> {
   }
 
   public getFailureMessage(): String[] {
-    return this.failureMessage;
+    return this.failureMessages;
   }
 }
