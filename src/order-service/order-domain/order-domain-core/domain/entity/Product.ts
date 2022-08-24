@@ -18,15 +18,12 @@ export class Product extends BaseEntity<ProductId> {
     return this.name;
   }
 
-  public setName(name: String): void {
-    this.name = name;
-  }
-
   public getPrice(): Money {
     return this.price;
   }
 
-  public setPrice(price: Money): void {
+  public updateWithConfirmedNameAndPrice(name: String, price: Money) {
+    this.name = name;
     this.price = price;
   }
 }
