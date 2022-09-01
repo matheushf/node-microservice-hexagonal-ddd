@@ -3,22 +3,20 @@ import { Money } from "~/common/common-domain/food-ordering-system/domain/valueO
 import { ProductId } from "~/common/common-domain/food-ordering-system/domain/valueObject/ProductId";
 
 export class Product extends BaseEntity<ProductId> {
-  private name: String;
-  private price: Money;
-
-  constructor(productId: ProductId, name: String, price: Money) {
+  constructor(
+    private productId: ProductId,
+    private name?: String,
+    private price?: Money
+  ) {
     super(productId);
     super.setId(productId);
-
-    this.name = name;
-    this.price = price;
   }
 
-  public getName(): String {
+  public getName(): String | undefined {
     return this.name;
   }
 
-  public getPrice(): Money {
+  public getPrice(): Money | undefined {
     return this.price;
   }
 

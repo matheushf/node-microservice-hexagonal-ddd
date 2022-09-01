@@ -12,40 +12,17 @@ import { TrackingId } from "../valueObject/TrackingId";
 import { OrderItem } from "./OrderItem";
 
 export class Order extends AggregateRoot<OrderId> {
-  private orderId: OrderId;
-  private customerId: CustomerId;
-  private restaurantId: RestaurantId;
-  private deliveryAddress: StreetAddress;
-  private price: Money;
-  private items: OrderItem[];
-
-  private trackingId: TrackingId;
-  private orderStatus: OrderStatus;
-  private failureMessages: String[];
-
   constructor(
-    orderId: OrderId,
-    customerId: CustomerId,
-    restaurantId: RestaurantId,
-    deliveryAddress: StreetAddress,
-    price: Money,
-    items: OrderItem[],
-    trackingId: TrackingId,
-    orderStatus: OrderStatus,
-    failureMessages: String[]
+    private customerId: CustomerId,
+    private restaurantId: RestaurantId,
+    private deliveryAddress: StreetAddress,
+    private price: Money,
+    private items: OrderItem[],
+    private trackingId: TrackingId,
+    private orderStatus: OrderStatus,
+    private failureMessages: String[]
   ) {
-    super(orderId);
-    super.setId(orderId);
-
-    this.orderId = orderId;
-    this.customerId = customerId;
-    this.restaurantId = restaurantId;
-    this.deliveryAddress = deliveryAddress;
-    this.price = price;
-    this.items = items;
-    this.trackingId = trackingId;
-    this.orderStatus = orderStatus;
-    this.failureMessages = failureMessages;
+    super();
   }
 
   public initializeOrder() {

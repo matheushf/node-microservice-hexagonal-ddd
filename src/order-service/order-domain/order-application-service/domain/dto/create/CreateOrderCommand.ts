@@ -10,4 +10,16 @@ export class CreateOrderCommand {
     private items: OrderItem[],
     private address: OrderAddress
   ) {}
+
+  getCustomerId(): UUID {
+    return this.customerId;
+  }
+
+  getRestaurantId(): UUID {
+    return this.restaurantId;
+  }
+
+  getItems(): OrderItem[] {
+    return this.items;
+  }
 }
