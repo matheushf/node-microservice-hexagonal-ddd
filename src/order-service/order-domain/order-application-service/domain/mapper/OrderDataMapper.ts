@@ -2,6 +2,7 @@ import uuid from "uuid";
 import {
   CustomerId,
   Money,
+  OrderStatus,
   ProductId,
   RestaurantId,
 } from "~/common/common-domain/food-ordering-system/domain/valueObject";
@@ -12,10 +13,12 @@ import {
   Restaurant,
 } from "~/order-service/order-domain/order-domain-core/domain/entity";
 import { StreetAddress } from "~/order-service/order-domain/order-domain-core/domain/valueObject";
+import { TrackingId } from "~/order-service/order-domain/order-domain-core/domain/valueObject/TrackingId";
 import { CreateOrderCommand } from "../dto/create/CreateOrderCommand";
 import { CreateOrderResponse } from "../dto/create/CreateOrderResponse";
 import { OrderAddress } from "../dto/create/OrderAddress";
 import { OrderItemDTO } from "../dto/create/OrderItemDTO";
+import { TrackOrderResponse } from "../dto/track/TrackOrderResponse";
 
 export class OrderDataMapper {
   createOrderCommandToRestaurant(
@@ -38,16 +41,29 @@ export class OrderDataMapper {
       new RestaurantId(createOrderCommand.getRestaurantId()),
       this.orderAddressToStreetAddress(createOrderCommand.getAddress()),
       new Money(createOrderCommand.getPrice()),
-      this.orderItemsToOrderItemEntities(createOrderCommand.getItems())
+      this.orderItemsToOrderItemEntities(createOrderCommand.getItems()),
+      [],
+      OrderStatus.PENDING
     );
   }
 
-  orderToCreateOrderResponse(order: Order, message: string): CreateOrderResponse {
+  orderToCreateOrderResponse(
+    order: Order,
+    message: string
+  ): CreateOrderResponse {
     return new CreateOrderResponse(
-      order.getTrackingId()?.getValue(),
+      order.getTrackingId()?.getValue() || "",
       order.getOrderStatus(),
-      message,
-    )
+      message
+    );
+  }
+
+  orderToTrackOrderResponse(order: Order): TrackOrderResponse {
+    return new TrackOrderResponse(
+      order.getTrackingId()?.getValue() || "",
+      order.getOrderStatus(),
+      order.getFailureMessage()
+    );
   }
 
   private orderItemsToOrderItemEntities(
@@ -60,7 +76,7 @@ export class OrderDataMapper {
         new Product(productId),
         orderItem.getQuantity(),
         new Money(orderItem.getPrice()),
-        new Money(orderItem.getSubtotal())      
+        new Money(orderItem.getSubtotal())
       );
     });
   }
