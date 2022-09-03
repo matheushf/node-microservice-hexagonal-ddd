@@ -18,11 +18,11 @@ export class Order extends AggregateRoot<OrderId> {
     private deliveryAddress: StreetAddress,
     private price: Money,
     private items: OrderItem[],
-    private trackingId: TrackingId,
-    private orderStatus: OrderStatus,
-    private failureMessages: String[]
+    private trackingId?: TrackingId,
+    private orderStatus?: OrderStatus,
+    private failureMessages?: String[]
   ) {
-    super();
+    super("0" as unknown as OrderId);
   }
 
   public initializeOrder() {
@@ -162,15 +162,15 @@ export class Order extends AggregateRoot<OrderId> {
     return this.items;
   }
 
-  public getTrackingId(): TrackingId {
+  public getTrackingId(): TrackingId | undefined {
     return this.trackingId;
   }
 
-  public getOrderStatus(): OrderStatus {
+  public getOrderStatus(): OrderStatus | undefined {
     return this.orderStatus;
   }
 
-  public getFailureMessage(): String[] {
+  public getFailureMessage(): String[] | undefined {
     return this.failureMessages;
   }
 }

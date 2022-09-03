@@ -5,37 +5,14 @@ import { OrderItemId } from "../valueObject/OrderItemId";
 import { Product } from "./Product";
 
 export class OrderItem extends BaseEntity<OrderItemId> {
-  private orderItemId: OrderItemId;
-  private orderId: OrderId;
-  private product: Product;
-  private quantity: number;
-  private price: Money;
-  private subTotal: Money;
-
-  constructor({
-    orderItemId,
-    orderId,
-    product,
-    quantity,
-    price,
-    subTotal,
-  }: {
-    orderItemId: OrderItemId;
-    orderId: OrderId;
-    product: Product;
-    quantity: number;
-    price: Money;
-    subTotal: Money;
-  }) {
-    super(orderItemId);
-    super.setId(orderItemId);
-
-    this.orderItemId = orderItemId;
-    this.orderId = orderId;
-    this.product = product;
-    this.quantity = quantity;
-    this.price = price;
-    this.subTotal = subTotal;
+  constructor(
+    // private orderId: OrderId,
+    private product: Product,
+    private quantity: number,
+    private price: Money,
+    private subTotal: Money
+  ) {
+    super("0" as unknown as OrderItemId);
   }
 
   isPriceValid() {
@@ -47,17 +24,17 @@ export class OrderItem extends BaseEntity<OrderItemId> {
   }
 
   public initializeOrderItem(orderId: OrderId, orderItemId: OrderItemId) {
-    this.orderId = orderId;
+    // this.orderId = orderId;
     super.setId(orderItemId);
   }
 
-  public getOrderId(): OrderId {
-    return this.orderId;
-  }
+  // public getOrderId(): OrderId {
+  //   return this.orderId;
+  // }
 
-  public setOrderId(orderId: OrderId): void {
-    this.orderId = orderId;
-  }
+  // public setOrderId(orderId: OrderId): void {
+  //   this.orderId = orderId;
+  // }
 
   public getProduct(): Product {
     return this.product;

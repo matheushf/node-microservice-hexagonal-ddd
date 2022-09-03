@@ -1,13 +1,13 @@
 import { UUID } from "~/types/types";
 import { OrderAddress } from "./OrderAddress";
-import { OrderItem } from "./OrderItem";
+import { OrderItemDTO } from "./OrderItemDTO";
 
 export class CreateOrderCommand {
   constructor(
     private customerId: UUID,
     private restaurantId: UUID,
     private price: number,
-    private items: OrderItem[],
+    private items: OrderItemDTO[],
     private address: OrderAddress
   ) {}
 
@@ -19,7 +19,15 @@ export class CreateOrderCommand {
     return this.restaurantId;
   }
 
-  getItems(): OrderItem[] {
+  getItems(): OrderItemDTO[] {
     return this.items;
+  }
+
+  getAddress(): OrderAddress {
+    return this.address;
+  }
+
+  getPrice(): number {
+    return this.price;
   }
 }
