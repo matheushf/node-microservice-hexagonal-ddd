@@ -18,7 +18,7 @@ export class OrderItem extends BaseEntity<OrderItemId> {
   isPriceValid() {
     return (
       this.price.isGreaterThanZero() &&
-      this.price.getAmount() === this.product.getPrice().getAmount() &&
+      this.price.getAmount() === this.product?.getPrice()?.getAmount() &&
       this.price.getAmount() * this.quantity === this.subTotal.getAmount()
     );
   }
